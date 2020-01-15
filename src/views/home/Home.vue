@@ -6,6 +6,8 @@
 
 <script>
   import NavBar from '../../components/common/navbar/NavBar'
+  //导出加default 导入不用{}
+  import {getHomeMulitdata} from '../../network/home'
   export default {
     name:'Home',
     components:{

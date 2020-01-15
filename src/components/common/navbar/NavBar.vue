@@ -8,23 +8,23 @@
 
 <script>
 export default {
-
+  name: 'NavBar'
 }
 </script>
 
 <style>
   .nav-bar{
-      display: flex;
-      height: 44px;
-      line-height: 44px;
-      text-align: center;
+    display: flex;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
   }
   .left , .right{
-      width: 60px;
+    width: 60px;
       /* background:rebeccapurple; */
   }
   .center{
-      flex: 1;
+    flex: 1;
       /* background:peru; */
   }
 </style>
