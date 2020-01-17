@@ -13,7 +13,7 @@ export function request(config) {
   // return new Promise((resolve, reject) => {
   const instance1 = axios.create({
     //创建实例并配置
-    baseURL: '',
+    baseURL: 'http://123.207.32.32:8000/api/hy',
     timeout: 5000
   })
 

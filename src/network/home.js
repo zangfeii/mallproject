@@ -1,6 +1,17 @@
 import { request } from './request'
+
 export function getHomeMulidata() {
   return request({
-    url: ''
+    url: '/home/multidata'
+  })
+}
+
+export function getHomegGoods(type, page) {
+  return request({
+    url: '/home/data',
+    params: {
+      type,
+      page
+    }
   })
 }
