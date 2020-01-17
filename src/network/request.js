@@ -12,10 +12,22 @@ import axios from 'axios'
 export function request(config) {
   // return new Promise((resolve, reject) => {
   const instance1 = axios.create({
-      baseURL: '',
-      timeout: 5000
-    })
-    //axios请求拦截器
+    //创建实例并配置
+    baseURL: '',
+    timeout: 5000
+  })
+
+  // instance1({
+  //   url:'home/data',
+  //   params:{
+  //     type: 'pop',
+  //     page: 1
+  //   }
+  //  }).then(res =>{
+  // })
+
+
+  //axios请求拦截器
   instance1.interceptors.request.use(config => {
     //成功拦截请求配置
 

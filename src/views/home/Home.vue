@@ -7,12 +7,24 @@
 <script>
   import NavBar from '../../components/common/navbar/NavBar'
   //导出加default 导入不用{}
-  import {getHomeMulitdata} from '../../network/home'
+  import {getHomeMulidata} from '../../network/home'
   export default {
     name:'Home',
     components:{
       NavBar
-    }
+    },
+    data() {
+      return {
+        banners: []
+      }
+    },
+    created() {
+      getHomeMulidata().then(res =>{
+        //函数结束,res会被回收,需要保存到 banners
+        this.banners = res.data.banner.list
+
+      })
+    },
 }
 </script>
 
