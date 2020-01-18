@@ -1,7 +1,7 @@
 <template>
   <div class="goods">
-    <home-good-list-item v-for="item in goods" :goodsitem = 'item' />
-      {{goods}}
+    <home-good-list-item v-for="item in goods" :gooditem= 'item' :key="item.iid" />
+      <!-- {{goods}} -->
     <home-good-list-item/>
   </div> 
 </template>
@@ -23,7 +23,10 @@ export default {
   }
 }
 </script>
-
+  
 <style>
-
+  .goods {
+    display: flex;
+    flex-wrap: wrap;
+  }
 </style>

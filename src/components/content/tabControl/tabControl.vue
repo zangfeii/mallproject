@@ -1,7 +1,7 @@
 <template>
 <div class="tabcontral">
   <div v-for="(item ,index) in titles" class="tab-contral-item" 
-  :class="{active: index === currentIndex}" @click="tabItemClick(index)">
+  :class="{active: index === currentIndex}" @click="tabItemClick(index)" :key="item">
     <span>{{item}}</span>
   </div>
 </div>
@@ -26,6 +26,7 @@ export default {
   methods: {
     tabItemClick(index) {
       this.currentIndex = index
+      this.$emit('tabclick', index)
     }
   },
 }

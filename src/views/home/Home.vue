@@ -5,7 +5,7 @@
   </nav-bar>
   <!-- 轮播图 -->
   <el-carousel trigger="click" height="200px">
-    <el-carousel-item v-for="item in banners">
+    <el-carousel-item v-for="item in banners" :key="item.acm">
       <a :href="item.link">
           <img :src="item.image" alt="" width ='100%' >
         </a>
@@ -14,8 +14,10 @@
 
   <home-recommed-view :recommends ='recommends'/>
   <feature-vive/>
-  <tab-control :titles ="['流行','新款','精选']" class="tabControl"/>
-  <home-good-list :goods = "goods['pop'].list" />
+  <tab-control :titles ="['流行','新款','精选']" class="tabControl" @tabclick = 'tabclick' />
+  <!-- <home-good-list :goods = "goods[currentType].list" /> -->
+  <home-good-list :goods = "showCurrentType" />
+
 </div>
 </template>
 
@@ -47,7 +49,13 @@
           'pop': {page: 0 ,list: []},
           'new': {page: 0 ,list: []},
           'sell': {page: 0 ,list: []}
-        }
+        },
+        currentType:'pop'
+      }
+    },
+    computed: {
+      showCurrentType(){
+        return this.goods[this.currentType].list
       }
     },
     created() {
@@ -83,6 +91,20 @@
         this.goods[type].list.push(...res.data.list) 
         this.goods[type].page += 1
       })
+      },
+      tabclick(index){
+        // console.log(index);
+        switch(index) {
+          case 0:
+            this.currentType = 'pop'
+            break
+          case 1:
+            this.currentType = 'new'
+            break
+          case 2:
+            this.currentType = 'sell'
+            break
+        }
       }
     },
   }
