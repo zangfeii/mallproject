@@ -1,6 +1,6 @@
 <template>
   <div id="app">  
-    <main-tab-bar></main-tab-bar>
+    <main-tab-bar class="zindex"></main-tab-bar>
     <!-- <MainTabBar></MainTabBar> -->
     <router-view></router-view>
   </div>
@@ -17,4 +17,8 @@
  </script>
 <style>
    @import '../src/assets/css/base.css';
+   .zindex{
+     z-index: 9;
+     /* padding: 0px !important; */
+   }
 </style>

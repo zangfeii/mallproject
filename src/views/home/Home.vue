@@ -3,7 +3,9 @@
   <nav-bar class="home-nav">
     <div slot="center">购物街</div>
   </nav-bar>
-  <!-- 轮播图 -->
+
+  <scroll class="connent" ref="scroll" :probe-type = '3' @scroll ='contentScroll'>
+    <!-- 轮播图 -->
   <el-carousel trigger="click" height="200px">
     <el-carousel-item v-for="item in banners" :key="item.acm">
       <a :href="item.link">
@@ -11,13 +13,14 @@
         </a>
     </el-carousel-item>
   </el-carousel>
-
   <home-recommed-view :recommends ='recommends'/>
   <feature-vive/>
   <tab-control :titles ="['流行','新款','精选']" class="tabControl" @tabclick = 'tabclick' />
   <!-- <home-good-list :goods = "goods[currentType].list" /> -->
   <home-good-list :goods = "showCurrentType" />
-
+  </scroll>
+  
+  <back-top @click.native="backClick" v-show="showBackTop"/>
 </div>
 </template>
 
@@ -28,6 +31,8 @@
   import NavBar from '../../components/common/navbar/NavBar'
   import tabControl from '../../components/content/tabControl/tabControl'
   import homeGoodList from '../../components/content/goods/homeGoodList'
+  import  backTop from '../../components/content/backtop/backTop'
+  import scroll from '../../components/common/scroll/srcoll'
 
   //导出加default 导入不用{}
   import { getHomeMulidata,getHomegGoods } from '../../network/home'
@@ -39,7 +44,9 @@
       homeRecommedView,
       featureVive,
       tabControl,
-      homeGoodList
+      homeGoodList,
+      backTop,
+      scroll 
     },
     data() {
       return {
@@ -50,7 +57,8 @@
           'new': {page: 0 ,list: []},
           'sell': {page: 0 ,list: []}
         },
-        currentType:'pop'
+        currentType:'pop',
+        showBackTop:true
       }
     },
     computed: {
@@ -105,14 +113,25 @@
             this.currentType = 'sell'
             break
         }
+      },
+      backClick(){
+        console.log('点击');
+        // this.$refs.scroll.scroll.scrollTo(0, 0,800)
+        this.$refs.scroll.scrollTo(0,0)
+        // console.log(this.$refs.scroll.scroll.scrollTo);
+      },
+      contentScroll(){
+        console.log(position);
+      // this.showBackTop = (-position.y) >1000
       }
     },
   }
 </script>
 
-<style>
+<style scoped>
   #home{
     padding-top: 44px;
+    position: relative;
   }
 
   .home-nav {
@@ -129,5 +148,15 @@
   .tabControl {
     position: sticky;
     top: 44px;
+  }
+
+  .connent{ 
+    /* overflow: hidden; */
+    position: absolute;
+   
+    top: 44px;
+    left: 0;
+    right: 0;
+    bottom: 49px;
   }
 </style>
