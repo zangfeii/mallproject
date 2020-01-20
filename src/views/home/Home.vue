@@ -4,20 +4,25 @@
     <div slot="center">购物街</div>
   </nav-bar>
 
-  <scroll class="connent" ref="scroll" :probe-type = '3' @scroll ='contentScroll'>
+  <scroll class="connent" 
+    ref="scroll" 
+    :probe-type = '3'
+    @scroll ='contentScroll'
+    :pull-up-load ='true'
+    @pullingUp = 'loadMore'>
     <!-- 轮播图 -->
-  <el-carousel trigger="click" height="200px">
-    <el-carousel-item v-for="item in banners" :key="item.acm">
-      <a :href="item.link">
+    <el-carousel trigger="click" height="200px">
+      <el-carousel-item v-for="item in banners" :key="item.acm">
+        <a :href="item.link">
           <img :src="item.image" alt="" width ='100%' >
         </a>
-    </el-carousel-item>
-  </el-carousel>
-  <home-recommed-view :recommends ='recommends'/>
-  <feature-vive/>
-  <tab-control :titles ="['流行','新款','精选']" class="tabControl" @tabclick = 'tabclick' />
+      </el-carousel-item>
+    </el-carousel>
+    <home-recommed-view :recommends ='recommends'/>
+    <feature-vive/>
+    <tab-control :titles ="['流行','新款','精选']" class="tabControl" @tabclick = 'tabclick' />
   <!-- <home-good-list :goods = "goods[currentType].list" /> -->
-  <home-good-list :goods = "showCurrentType" />
+    <home-good-list :goods = "showCurrentType" />
   </scroll>
   
   <back-top @click.native="backClick" v-show="showBackTop"/>
@@ -57,14 +62,15 @@
           'new': {page: 0 ,list: []},
           'sell': {page: 0 ,list: []}
         },
-        currentType:'pop',
-        showBackTop:true
+        currentType: 'pop',
+        showBackTop: !false
       }
     },
     computed: {
       showCurrentType(){
         return this.goods[this.currentType].list
-      }
+      },
+      
     },
     created() {
       // getHomeMulidata().then(res => {
@@ -82,6 +88,12 @@
       this.getHomegGoods('pop')
       this.getHomegGoods('new')
       this.getHomegGoods('sell')
+
+    },
+    mounted() {
+      this.$bus.$on('loadimg', () =>{
+        this.$refs.scroll.scroll.refresh()
+      })
     },
     methods: {
       getHomeMulidata() {
@@ -98,6 +110,11 @@
         console.log(res.data.list);
         this.goods[type].list.push(...res.data.list) 
         this.goods[type].page += 1
+        //滚动多次加载
+        this.$refs.scroll.scroll.finishPullUp()
+        //刷新 解决滑动卡住
+        this.$refs.scroll.scroll.refresh()
+
       })
       },
       tabclick(index){
@@ -120,9 +137,14 @@
         this.$refs.scroll.scrollTo(0,0)
         // console.log(this.$refs.scroll.scroll.scrollTo);
       },
-      contentScroll(){
-        console.log(position);
-      // this.showBackTop = (-position.y) >1000
+      contentScroll(position){
+        // console.log(position);
+        // console.log(this.showBackTop);
+        this.showBackTop = (-position.y) >1000
+        // console.log((-position.y) >1000);
+      },
+      loadMore(){
+        this.getHomegGoods(this.currentType)
       }
     },
   }
@@ -132,6 +154,7 @@
   #home{
     padding-top: 44px;
     position: relative;
+    z-index: 9;
   }
 
   .home-nav {
@@ -153,7 +176,6 @@
   .connent{ 
     /* overflow: hidden; */
     position: absolute;
-   
     top: 44px;
     left: 0;
     right: 0;

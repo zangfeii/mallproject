@@ -1,6 +1,6 @@
 <template>
   <div class="gooditem">
-    <img :src="gooditem.show.img" alt="">
+    <img :src="gooditem.show.img" alt=""  @load="imgLoad">
     
     <div class="good-info">
       <p class="goodtext">{{gooditem.title}}</p>
@@ -20,7 +20,13 @@ export default {
         return {}
       }
     }
-  }
+  },
+  methods: {
+    imgLoad(){
+      //$bus需要在main.js中配置
+    this.$bus.$emit('loadimg')
+    }
+  },
 }
 </script>
 
