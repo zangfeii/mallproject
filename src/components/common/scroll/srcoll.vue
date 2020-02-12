@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapp" ref="wrapp">
+  <div ref="wrapp">
     <div class="conent">
       <slot></slot>
     </div>
@@ -9,7 +9,7 @@
 <script>
 import  BScroll from 'better-scroll'
 export default {
-  name: 'Scroll',
+  name: 'scroll',
   props: {
     probeType :{
       type: Number,
@@ -23,7 +23,6 @@ export default {
   data() {
     return {
      scroll: null,
-     
     }
   },
   mounted() {

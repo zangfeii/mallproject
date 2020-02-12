@@ -1,6 +1,6 @@
 <template>
-  <div class="gooditem">
-    <img :src="gooditem.show.img" alt=""  @load="imgLoad">
+  <div class="gooditem" @click="itemClicl" v-show="gooditem">
+    <img :src="showimg" alt=""  @load="imgLoad">
     
     <div class="good-info">
       <p class="goodtext">{{gooditem.title}}</p>
@@ -24,7 +24,26 @@ export default {
   methods: {
     imgLoad(){
       //$bus需要在main.js中配置
-    this.$bus.$emit('loadimg')
+    if(this.$route.path.indexOf('/home')){
+      this.$bus.$emit('loadimg')
+    } else if(this.$route.path.indexOf('/detail')){
+      this.$bus.$emit('detailItemimgLoad')
+    }
+    
+    },
+    itemClicl(){
+      this.$router.push("/detail/"+this.gooditem.iid)
+      console.log('点击');
+    }
+  },
+
+  computed: {
+    showimg(){
+      return   this.gooditem.image || this.gooditem.show.img
+      // if(this.gooditem.show.img){
+      //   return this.gooditem.show.img
+      // }
+      // return this.gooditem.image
     }
   },
 }

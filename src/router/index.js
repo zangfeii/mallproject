@@ -8,6 +8,8 @@ const Profile = () =>
   import ('../views/profile/Profile.vue')
 const Category = () =>
   import ("../views/category/Category.vue")
+const Detail = () =>
+  import ('../views/detail/detail.vue')
 
 Vue.use(VueRouter)
 const routes = [
@@ -43,12 +45,20 @@ const routes = [
   {
     path: '/category',
     component: Category
+  },
+  {
+    path: '/detail/:iid',
+    component: Detail,
+    meta: {
+      pageTitle: '商品详情',
+      keepAlive: true
+    }
   }
 ]
 
 const router = new VueRouter({
   routes,
-  // mode: 'history'
+  mode: 'history'
 })
 
 export default router

@@ -4,23 +4,27 @@
     <div slot="center">购物街</div>
   </nav-bar>
 
+  <tab-control :titles ="['流行','新款','精选']"  @tabclick = 'tabclick' 
+  ref='tabcontrol1' class="relfied" v-show="isfied"/>
+
   <scroll class="connent" 
     ref="scroll" 
-    :probe-type = '3'
+    :probe-type ='3'
     @scroll ='contentScroll'
     :pull-up-load ='true'
     @pullingUp = 'loadMore'>
     <!-- 轮播图 -->
-    <el-carousel trigger="click" height="200px">
+    <el-carousel trigger="click" height="200px" ref='swiperimg'>
       <el-carousel-item v-for="item in banners" :key="item.acm">
         <a :href="item.link">
-          <img :src="item.image" alt="" width ='100%' >
+          <img :src="item.image" alt="" width ='100%' @load="swiperimageload">
         </a>
       </el-carousel-item>
     </el-carousel>
     <home-recommed-view :recommends ='recommends'/>
     <feature-vive/>
-    <tab-control :titles ="['流行','新款','精选']" class="tabControl" @tabclick = 'tabclick' />
+    <tab-control :titles ="['流行','新款','精选']"  @tabclick = 'tabclick' 
+                 ref='tabcontrol2' />
   <!-- <home-good-list :goods = "goods[currentType].list" /> -->
     <home-good-list :goods = "showCurrentType" />
   </scroll>
@@ -41,6 +45,7 @@
 
   //导出加default 导入不用{}
   import { getHomeMulidata,getHomegGoods } from '../../network/home'
+  import {debounce} from '../../common/tool'
 
   export default {
     name: 'Home',
@@ -63,13 +68,17 @@
           'sell': {page: 0 ,list: []}
         },
         currentType: 'pop',
-        showBackTop: !false
+        showBackTop: false,
+        tabcontrolheight:0,
+        isfied:false,
+        leveSaveY:0
       }
     },
     computed: {
       showCurrentType(){
         return this.goods[this.currentType].list
       },
+      
       
     },
     created() {
@@ -91,9 +100,19 @@
 
     },
     mounted() {
+      const refres = debounce(this.$refs.scroll.scroll.refresh,100)
       this.$bus.$on('loadimg', () =>{
-        this.$refs.scroll.scroll.refresh()
+        refres()  
       })
+    },
+    activated() {
+      this.$refs.scroll.scroll.scrollTo(0, this.leveSaveY,0)
+      this.$refs.scroll.scroll.refresh()
+    },
+    deactivated() {
+      this.leveSaveY = this.$refs.scroll.scroll.y
+      console.log(this.leveSaveY);
+      // console.log(this.$refs.scroll.scroll.refresh);
     },
     methods: {
       getHomeMulidata() {
@@ -113,7 +132,7 @@
         //滚动多次加载
         this.$refs.scroll.scroll.finishPullUp()
         //刷新 解决滑动卡住
-        this.$refs.scroll.scroll.refresh()
+        // this.$refs.scroll.scroll.refresh()
 
       })
       },
@@ -130,6 +149,8 @@
             this.currentType = 'sell'
             break
         }
+        this.$refs.tabcontrol1.currentIndex = index
+        this.$refs.tabcontrol2.currentIndex = index
       },
       backClick(){
         console.log('点击');
@@ -137,15 +158,22 @@
         this.$refs.scroll.scrollTo(0,0)
         // console.log(this.$refs.scroll.scroll.scrollTo);
       },
+      //获取tabcontro到顶部的距离
+      swiperimageload(){
+        this.tabcontrolheight = this.$refs.tabcontrol2.$el.offsetTop
+      },
       contentScroll(position){
         // console.log(position);
         // console.log(this.showBackTop);
-        this.showBackTop = (-position.y) >1000
+        this.showBackTop = (-position.y) >500
+        this.isfied = (-position.y)>this.tabcontrolheight
         // console.log((-position.y) >1000);
       },
       loadMore(){
         this.getHomegGoods(this.currentType)
-      }
+      },
+      
+     
     },
   }
 </script>
@@ -168,10 +196,10 @@
   /* width: 100%; */
   }
 
-  .tabControl {
+  /* .tabControl {
     position: sticky;
     top: 44px;
-  }
+  } */
 
   .connent{ 
     /* overflow: hidden; */
@@ -180,5 +208,10 @@
     left: 0;
     right: 0;
     bottom: 49px;
+  }
+
+  .relfied{
+    position: relative;;
+    z-index: 9;
   }
 </style>

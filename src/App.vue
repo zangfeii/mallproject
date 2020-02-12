@@ -1,8 +1,11 @@
 <template>
   <div id="app">  
+    <!-- exclude 排除不需要缓存的组件  detail是name -->
+    <keep-alive exclude="detail">
+       <router-view></router-view>
+    </keep-alive>
     <main-tab-bar class="zindex"></main-tab-bar>
     <!-- <MainTabBar></MainTabBar> -->
-    <router-view></router-view>
   </div>
 </template>
  
