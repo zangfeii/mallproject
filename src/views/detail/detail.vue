@@ -1,7 +1,6 @@
 <template>
   <div id="detaill">
     <detail-nav-bar class="nav_bar" @titleClick='titleClick' ref='detalnavbarRef' ></detail-nav-bar>
-    <detail-botton-bar class="botton-class"></detail-botton-bar>
     <scroll class="conent" ref="detailref"  @scroll ='detailScrollHeight'  :probe-type ='3'>
       <detaik-swipper :imgs='iiddatatopimg'></detaik-swipper>
       <good-status :msg='goods'></good-status>
@@ -11,6 +10,8 @@
       <detail-comment-info :user-comment='userCommentInfo' ref="userCommnetRef" ></detail-comment-info>
       <home-good-list :goods ='recommend' ref="goodsListRef"></home-good-list>
     </scroll>
+    <detail-botton-bar class="botton-class" @addGoodsCar='addCar'></detail-botton-bar>
+     <back-top @click.native="backClick" v-show="showBackTop"/>
   </div>
 </template>
 
@@ -26,6 +27,7 @@ import detailBottonBar from './childreComp/detailBottonBar'
 
 import scroll from '../../components/common/scroll/srcoll'
 import homeGoodList from '../../components/content/goods/homeGoodList'
+import backTop from '../../components/content/backtop/backTop'
 
 import {getDetail,Goods,Shopper,GoodsParams,getRecommend} from '../../network/detail'
 export default {
@@ -40,7 +42,8 @@ export default {
     detailCommentInfo,
     homeGoodList,
     detailBottonBar,
-    scroll
+    scroll,
+    backTop
   },
   data() {
     return {
@@ -53,7 +56,8 @@ export default {
       ruledata :{},
       userCommentInfo :{},
       recommend:[],
-      titleCheckHeight:[]
+      titleCheckHeight:[],
+      showBackTop: false
     }
   },
   created() {
@@ -116,8 +120,16 @@ export default {
     titleClick(index) {
       this.$refs.detailref.scrollTo(0,-this.titleCheckHeight[index])
     },
+    backClick(){
+        console.log('点击');
+        // this.$refs.scroll.scroll.scrollTo(0, 0,800)
+        this.$refs.detailref.scrollTo(0,0)
+        // console.log(this.$refs.scroll.scroll.scrollTo);
+    },
+   
     detailScrollHeight(position){
       // console.log(-position.y);
+      this.showBackTop = (-position.y) >500
       for (let index = 0; index < this.titleCheckHeight.length; index++) {
          if((index < this.titleCheckHeight.length-1 && -position.y > this.titleCheckHeight[index] && 
            -position.y < this.titleCheckHeight[index +1] ) || (index === this.titleCheckHeight.length -1 
@@ -125,6 +137,15 @@ export default {
           this.$refs.detalnavbarRef.titleClick = index
          }
       }
+    },
+    addCar() {
+      console.log('添加购物车');
+      const googdsCar = {}
+      googdsCar.img = this.iiddatatopimg[0]
+      googdsCar.title = this.goods.title
+      googdsCar.price = this.goods.oldPrice
+      googdsCar.iid = this.iid
+      this.$store.commit('addCart',googdsCar)
     }
   },
   
@@ -140,22 +161,23 @@ export default {
   
   #detaill {
     position: relative;
-    z-index: 11;
+    z-index: 12;
     background-color: #fff;
   }
 
   .conent {
     /* z-index: 11; */
+    background: #fff;
     position: absolute;
     top: 44px;
     left: 0;
     right: 0;
   }
 
-  /* .botton-class{
-    position: relative;
-    top: 630px;
-    bottom: -300px;
-    z-index: 99;
-  } */
+  .botton-class{
+    width: 100%;
+    position: absolute;
+    bottom: -690px;
+    z-index: 11;
+  }
 </style>
