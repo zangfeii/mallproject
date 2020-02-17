@@ -143,9 +143,9 @@ export default {
       const googdsCar = {}
       googdsCar.img = this.iiddatatopimg[0]
       googdsCar.title = this.goods.title
-      googdsCar.price = this.goods.oldPrice
+      googdsCar.price = this.goods.realPrice
       googdsCar.iid = this.iid
-      this.$store.commit('addCart',googdsCar)
+      this.$store.commit('addCart',googdsCar) 
     }
   },
   

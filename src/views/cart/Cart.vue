@@ -6,7 +6,7 @@
     <scroll class="connent">
       <car-list></car-list>
     </scroll>
-    <car-buy-button class="buyBtn" :isAllCheck='isALLCheck' @click.native='allCheckBtn' v-show="this.$store.state.carList.length"></car-buy-button>
+    <car-buy-button class="buyBtn"   v-show="this.$store.state.carList.length"></car-buy-button>
   </div>
 </template>
 
@@ -27,20 +27,13 @@ export default {
   },
   data () {
     return {
-      isALLCheck: false
+      // isALLCheck: true
     }
   },
   methods: {
-    allCheckBtn() {
-      for (const item of this.$store.state.carList) { 
-        if(item.isChecked) {
-          item.isChecked = item.isChecked
-        } else {
-          item.isChecked = !item.isChecked
-        }
-      }
-      this.isALLCheck = !this.isALLCheck
-    }
+    // allCheckBtn() {
+    //   this.isALLCheck = !this.isALLCheck
+    // }
   }
 }
 </script>

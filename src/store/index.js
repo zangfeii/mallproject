@@ -33,6 +33,19 @@ export default new Vuex.Store({
         payload.isChecked = true
         state.carList.push(payload)
       }
+      // return new Promise((resolve, reject) => {
+      //   let oldGood = state.carList.find(item => item.iid === payload.iid)
+      //   if (oldGood) {
+      //     oldGood.count += 1
+      //     resolve('当前商品数量加以')
+      //   } else {
+      //     payload.count = 1
+      //     payload.isChecked = true
+      //     state.carList.push(payload)
+      //     resolve('添加新的商品')
+      //   }
+      // })
+
 
     }
   },
